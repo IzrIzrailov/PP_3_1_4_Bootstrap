@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
@@ -15,20 +16,36 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String username;
-    private String surname;
-    private int age;
 
+    @Column
+    @NotEmpty
+    @Size(min = 5, max = 12, message = "Username must be at least 5 and at most 12")
+    private String username;
+
+    @Column
+    private String surname;
+
+    @Column
+    @Min(value = 1, message = "Age not less than 1 and not more than 127")
+    @Max(value = 127, message = "Age not less than 1 and not more than 127")
+    private byte age;
+
+    @Column
+    @NotEmpty
+    @Size(min = 8, message = "Password must be at least 8 and at most 12")
     private String password;
+
+    @Column
+    @Email
     private String email;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    public User(long id, String username, String surname, int age, String password, String email, Set<Role> roles) {
+    public User(long id, String username, String surname, byte age, String password, String email, Set<Role> roles) {
         this.id = id;
         this.username = username;
         this.surname = surname;
@@ -38,7 +55,7 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    public User(String username, String surname, int age, String password, String email) {
+    public User(String username, String surname, byte age, String password, String email) {
         this.username = username;
         this.surname = surname;
         this.age = age;
@@ -82,11 +99,11 @@ public class User implements UserDetails {
         this.surname = surname;
     }
 
-    public int getAge() {
+    public byte getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(byte age) {
         this.age = age;
     }
 
