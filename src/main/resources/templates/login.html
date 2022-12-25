@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<head>
+  <title>Login page</title>
+  <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+  <div tiles:fragment="content">
+    <form th:action="@{/}" method="post" class="form-signin">
+      <h2 class="form-signin-heading">Please sign in</h2>
+      <div th:if="${param.error}" class="alert alert-danger" role="alert">
+        Invalid username or password.
+      </div>
+      <div th:if="${param.logout}" class="alert alert-success" role="alert">
+        You have been logged out.
+      </div>
+      <p>
+        <label for="emailAddress" class="sr-only">Username</label>
+        <input type="email" id="emailAddress" name="j_username" class="form-control" placeholder="Email address"
+               required autofocus>
+      </p>
+      <p>
+        <label for="password" class="sr-only">Password</label>
+        <input type="password" id="password" name="j_password" class="form-control" placeholder="Password">
+      </p>
+      <input name="_csrf" type="hidden">
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>
